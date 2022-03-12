@@ -1,6 +1,6 @@
 print "What is your name? "
 first_name = gets.chomp
-fistr_name.capitalize!
+first_name.capitalize!
 puts "Your first name is #{first_name}"
 
 print "what is your last name? "
