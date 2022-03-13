@@ -5,7 +5,7 @@
 
 
 print "Введите основание треугольника: "
-a = Integer(gets.chomp)
+a = gets.chomp.to_f
 print "Введите высоту треугольника: "
-h = Integer(gets.chomp)
+h = gets.chomp.to_f
 puts "Площадь треугольника равна #{1.0 / 2 * a * h}"
