@@ -25,3 +25,4 @@ elsif discriminant == 0
 else
   puts "Корней нет!"
 end
+
