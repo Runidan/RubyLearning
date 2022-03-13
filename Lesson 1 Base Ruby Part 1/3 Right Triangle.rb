@@ -4,12 +4,12 @@
 =end
 
 print "Введите длину стороны 1: "
-hypotenuse = gets.chomp.to_i
+hypotenuse = gets.chomp.to_f
 print "Введите длину стороны 2: "
-leg1 = gets.chomp.to_i
+leg1 = gets.chomp.to_f
 hypotenuse, leg1 = leg1, hypotenuse if leg1 > hypotenuse
 print "Введите длину стороны 3: "
-leg2 = gets.chomp.to_i
+leg2 = gets.chomp.to_f
 hypotenuse, leg2 = leg2, hypotenuse if leg2 > hypotenuse
 
 if hypotenuse**2 == leg1**2 + leg2**2
