@@ -28,4 +28,3 @@ buy_list_hash.each do |name, money|
     end
 end
 puts "Итого: #{summa} р."
-gets
