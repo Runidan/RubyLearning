@@ -7,7 +7,7 @@
 
 fibonachi_arr = [0, 1]
 loop do
-    n = fibonachi_arr[-1] + fibonachi_arr[-2]
+    n = fibonachi_arr[-2, 2].sum
     break if n > 100
     fibonachi_arr.push(n)
 end 
