@@ -26,12 +26,12 @@ class Station
     passenger_trains = 0
     @trains.each do |train|
       if train.type == :cargo
-        cargo_trains << train
+        cargo_trains += 1
       else
-        passenger_trains << train
+        passenger_trains += 1
       end
     end
-    return {"cargo trains" => cargo_trains.size, "passenger trains" =>  passenger_trains.size}
+    return {:cargo => cargo_trains, :passenger =>  passenger_trains}
   end
 
   def send_train(train)
