@@ -11,7 +11,7 @@
 class Route
   attr_reader :stations
 
-  def initilaize(first_station, last_station)
+  def initialize(first_station, last_station)
     @stations = [first_station, last_station]
   end
 
@@ -23,7 +23,7 @@ class Route
     @stations.delete(station)
   end
 
-  def show_station
+  def show_stations
     @stations.each {|station| puts station.name}
   end
 end

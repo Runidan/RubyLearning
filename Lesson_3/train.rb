@@ -18,7 +18,7 @@ class Train
   attr_reader :number, :type, :vagons_count, :speed
 
 
-  def initilaize(numder, type, vagons_count)
+  def initialize(number, type, vagons_count)
     @number = number
     @type = type
     @vagons_count = vagons_count
@@ -38,6 +38,7 @@ class Train
     if @speed == 0
        @vagons_count += 1
     end
+  end
 
   def delete_vagon  
     if @speed == 0 &&  @vagons_count > 0
@@ -47,28 +48,28 @@ class Train
 
   def add_route(route)
     @route = route
-    route.stations(0).add_train(self)
+    @route.stations[0].add_train(self)
     @current_station_index = 0
   end
 
-  def what_next_station
-    return @route.stations(@current_station_index + 1) if @route && @current_station_index != @route.stations.size - 1
+  def next_station
+    return @route.stations[@current_station_index + 1] if @route && @current_station_index != @route.stations.size - 1
   end
 
-  def what_previos_station
-    return @route.station(@current_station_index - 1) if @route && @current_station_index != 0
+  def previos_station
+    return @route.stations[@current_station_index - 1] if @route && @current_station_index != 0
   end  
 
   def go_next_station
     if @route && @current_station_index != @route.stations.size - 1
-      @current_station.send_train(self)
-      @current_station += 1
+      @route.stations[@current_station_index].send_train(self)
+      @current_station_index += 1
     end
   end 
 
   def go_previos_station
     if @route && @current_station_index != 0
-      @current_station.send_train(self)
+      @route.stations[@current_station_index].send_train(self)
       @current_station_index -= 1
     end
   end
