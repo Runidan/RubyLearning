@@ -9,23 +9,21 @@
 =end
 
 class Route
+  attr_reader :stations
+
   def initilaize(first_station, last_station)
-    @first_station = first_station
-    @last_station = last_station
-    @list_stations = []
+    @stations = [first_station, last_station]
   end
 
   def add_station(station)
-    @list_stations << station
+    @stations.insert(-2, station)
   end
 
   def delete_station(station)
-    @list_stations.delete(station)
+    @stations.delete(station)
   end
 
-  def show_list_station
-    puts @first_station.name
-    @list_stations.each {|station| puts station.name}
-    puts @last_station.name
+  def show_station
+    @stations.each {|station| puts station.name}
   end
 end

@@ -1,6 +1,6 @@
 =begin
   
-+/-Имеет номер (произвольная строка) и тип (грузовой, пассажирский) и количество вагонов, эти данные указываются при создании экземпляра класса
+Имеет номер (произвольная строка) и тип (грузовой, пассажирский) и количество вагонов, эти данные указываются при создании экземпляра класса
 Может набирать скорость
 Может возвращать текущую скорость
 Может тормозить (сбрасывать скорость до нуля)
@@ -15,23 +15,19 @@
 =end
 
 class Train
-  attr_reader :number, :speed, :how_many_vagons, :next_station, :previos_station
-  attr_accessor :current_station
+  attr_reader :number, :type, :vagons_count, :speed
 
 
-  def initilaize(numder, type, how_many_vagons)
+  def initilaize(numder, type, vagons_count)
     @number = number
-    @type = ""
-    @how_many_vagons = how_many_vagons
+    @type = type
+    @vagons_count = vagons_count
     @speed = 0
-    @route = nil
-    @current_station = nil
-    @next_station = nil
-    @previos_station = nil
+ 
   end
 
-  def accelerator
-    @speed += 5
+  def accelerator(value = 5)
+    @speed += value
   end
 
   def stop
@@ -40,48 +36,40 @@ class Train
 
   def add_vagon
     if @speed == 0
-      @how_many_vagons += 1
+       @vagons_count += 1
     end
 
   def delete_vagon  
-    if @speed == 0 && @how_many_vagons > 0
-      @how_many_vagons -= 1
+    if @speed == 0 &&  @vagons_count > 0
+       @vagons_count -= 1
     end  
   end
 
   def add_route(route)
     @route = route
-    route.first_station.add_train(self)
-    self.what_next_station
+    route.stations(0).add_train(self)
+    @current_station_index = 0
   end
 
   def what_next_station
-    if @route && @current_station != @route.last_station
-      all_route = self.route.list_stations.unshift(self.route.first_station) << self.route.last_station
-      @next_station = all_route[all_route.index(@current_station) + 1]
-    else
-      @next_station = nil
-    end
+    return @route.stations(@current_station_index + 1) if @route && @current_station_index != @route.stations.size - 1
   end
 
   def what_previos_station
-    if @route && @current_station != @route.first_station
-      all_route = self.route.list_stations.unshift(self.route.first_station) << self.route.last_station
-      @previos_station = all_route[all_route.index(@current_station) - 1]
-    else
-      @previos_station = nil
-    end
+    return @route.station(@current_station_index - 1) if @route && @current_station_index != 0
   end  
 
   def go_next_station
-    @current_station.send_train(self)
-    @current_station = @next_station
-    self.what_next_station
+    if @route && @current_station_index != @route.stations.size - 1
+      @current_station.send_train(self)
+      @current_station += 1
+    end
   end 
 
   def go_previos_station
-    @current_station.send_train(self)
-    @current_station = @previos_station
-    self.what_previos_station
+    if @route && @current_station_index != 0
+      @current_station.send_train(self)
+      @current_station_index -= 1
+    end
   end
 end

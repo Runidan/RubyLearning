@@ -22,22 +22,21 @@ class Station
   end
 
   def train_types
-    cargo_trains = []
-    passenger_trains = []
-    @trains.each {|train|
-      if train.type == "cargo"
+    cargo_trains = 0
+    passenger_trains = 0
+    @trains.each do |train|
+      if train.type == :cargo
         cargo_trains << train
       else
         passenger_trains << train
       end
-    }
+    end
     return {"cargo trains" => cargo_trains.size, "passenger trains" =>  passenger_trains.size}
   end
 
   def send_train(train)
     if @trains.include?(train)
       @trains.delete(train)
-      train.current_station(nil)
     end  
   end
 end
