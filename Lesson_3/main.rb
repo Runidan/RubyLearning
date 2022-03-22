@@ -27,13 +27,13 @@ def main
     puts "6 - Отцеплять вагоны от поезда"
     puts "7 - Перемещать поезд по маршруту вперед и назад"
     puts "8 - Просматривать список станций и список поездов на станции"
-    puts "9 - Выйти из программы"  
+    puts "0 - Выйти из программы"  
     print "Выберете номер пункта меню: "
     choice = gets.chomp.to_i
     if choice == 1
-         make_station
+      make_station
     elsif choice == 2
-     
+      make_train
     elsif choice == 3
       
     elsif choice == 4
@@ -46,8 +46,8 @@ def main
      
     elsif choice == 8
      
-    elsif choice == 9
-     
+    elsif choice == 0
+      puts "Спасибо, всего доброго!"
     else
       puts "Пункт меню отствутствует"
     end
@@ -60,5 +60,21 @@ def make_station
   st = Station.new(name)
   puts "Станция #{st.name.to_s} создана"
 end
+
+def make_train
+  print "Введите номер поезда: "
+  number = gets.chomp.to_sym
+  print "Введите тип поезда (1 - Cargo, 2 - Passenger): "
+  type = gets.chomp.to_i
+  if type == 1
+    type = :cargo
+  else
+    type = :passenger
+  end
+  print "Введите количество вагонов: "
+  vagons_count = gets.chomp.to_i
+  tr = Train.new(number, type, vagons_count) 
+  puts "Поезд №#{tr.number.to_s} создан. Тип - #{tr.type.to_s}"
+end  
 
 main
