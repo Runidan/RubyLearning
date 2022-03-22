@@ -9,11 +9,15 @@
 =end
 
 class Station
+  @@stations = {}
+
+
   attr_reader :name, :trains
 
   def initialize(name)
     @name = name
     @trains = []
+    @@stations[name] = self
   end
 
   def add_train(train)
