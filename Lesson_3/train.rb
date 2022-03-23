@@ -13,18 +13,13 @@
 =end
 
 class Train
-  @@trains = {}
-
   attr_reader :number, :type, :vagons_count, :speed
-
 
   def initialize(number, type, vagons_count)
     @number = number
     @type = type
     @vagons_count = vagons_count
     @speed = 0
-    @@trains[numder] = self
- 
   end
 
   def accelerator(value = 5)
@@ -73,5 +68,17 @@ class Train
       @route.stations[@current_station_index].send_train(self)
       @current_station_index -= 1
     end
+  end
+end
+
+class CargoTrain < Train
+  def initialize
+
+  end
+end
+
+class PassengerTrain < Train
+  def initialize
+
   end
 end
