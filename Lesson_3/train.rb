@@ -13,12 +13,11 @@
 =end
 
 class Train
-  attr_reader :number, :type, :vagons_count, :speed
+  attr_reader :number, :type, :speed
 
-  def initialize(number, type, vagons_count)
+  def initialize(number, type)
     @number = number
     @type = type
-    @vagons_count = vagons_count
     @speed = 0
   end
 
@@ -30,15 +29,15 @@ class Train
     @speed = 0
   end
 
-  def add_vagon
-    if @speed == 0
-       @vagons_count += 1
+  def add_wagon(wagon)
+    if @speed == 0 && wagon.type == self.type
+       @train_wagons << wagon
     end
   end
 
-  def delete_vagon  
-    if @speed == 0 &&  @vagons_count > 0
-       @vagons_count -= 1
+  def delete_wagon
+    if @speed == 0 &&  @train_wagons.size != 0
+       @train_wagons.pop
     end  
   end
 
@@ -50,6 +49,7 @@ class Train
 
   def next_station
     return @route.stations[@current_station_index + 1] if @route && @current_station_index != @route.stations.size - 1
+    
   end
 
   def previos_station
@@ -60,6 +60,7 @@ class Train
     if @route && @current_station_index != @route.stations.size - 1
       @route.stations[@current_station_index].send_train(self)
       @current_station_index += 1
+      puts "Поезд прибыл на станцию #{@route.stations[@current_station_index]}"
     end
   end 
 
@@ -67,18 +68,21 @@ class Train
     if @route && @current_station_index != 0
       @route.stations[@current_station_index].send_train(self)
       @current_station_index -= 1
+      puts "Поезд прибыл на станцию #{@route.stations[@current_station_index]}"
     end
   end
 end
 
 class CargoTrain < Train
   def initialize
-
+    super
+    @type = :cargo
   end
 end
 
 class PassengerTrain < Train
   def initialize
-
+    super
+    @type = :passenger
   end
 end

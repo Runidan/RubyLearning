@@ -33,11 +33,9 @@ class Menu
           print "\n\tВведите 1 для создания или 2 для редактирования маршрута: "
           gets.chomp.to_i == 1 ? make_route : edit_route
         elsif choice == 4 then add_route_train
-        elsif choice == 5 then add_wagons_totrain
-         
-        elsif choice == 6
-         
-        elsif choice == 7
+        elsif choice == 5 then add_wagons_train
+        elsif choice == 6 then delete_wagon_train
+        elsif choice == 7 then move_train
          
         elsif choice == 8
          
@@ -133,20 +131,54 @@ class Menu
     i = gets.chomp.to_i - 1
     route = @routes[i]
 
-    puts "\n\tВыберете поезд для добавления: "
-    @trains.each do |train|
-      puts "\t#{@trains.index(train) + 1}: №#{train.number}, тип: #{train.type}"
-    end
-    j = gets.chomp.to_i - 1
-    train = @trains[j]
-
+    puts "\n\tВыберете поезд для добавления маршрута: "
+    train = choose_train
     train.add_route(route)
     puts "Маршрут #{route.stations.first.name}-#{route.stations.last.name} добавлен поезду №#{train.number}"
   end
 
-  def add_wagons_totrain
-
+  def add_wagons_train
+    puts "\tК какому поезду прицепить вагон?"
+    train = choose_train
+    type = train.type
+    if type == :cargo
+      wg = CargoWagon.new
+    else
+      wg = PassengerWagon.new
+    end
+    train.add_wagon(wg)
   end
 
+  def delete_wagon_train
+    puts "\n\tОт какого поезда отцепить вагон?"
+    train = choose_train
+    train.delete_wagon
+  end
 
+  def move_train
+    train = choose_train
+    choose
+    unless choose
+      puts "\n\tВыберете: "
+      puts "\t1: Движение вперед"
+      puts "\t2: Движение назад"
+      puts "\t0: Выйти в основное меню"
+      case gets.chomp.to_i
+      when 1 then train.go_next_station
+      when 2 then train.go_previos_station
+      when 0 then choose = True
+      else
+        puts "Повторите выбор\n\n"
+      end
+    end
+  end
+
+  def choose_train
+    @trains.each do |train|
+      if train.train_wagons != nil
+        puts "#{@trains.index(train) + 1}: №#{train.type} Тип: #{train.type}"
+      end  
+    end
+    @trains[gets.chomp.to_i - 1]
+  end
 end
