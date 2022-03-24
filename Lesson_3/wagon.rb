@@ -12,8 +12,9 @@ end
 class CargoWagon < Wagon
 
   def initialize
-    super
     @type = :cargo
+    @@wagons_count += 1
+    @wagon_number = @@wagons_count
   end
 
 end  
@@ -21,8 +22,9 @@ end
 class PassengerWagon < Wagon
 
   def initialize
-    super
     @type = :passenger
+    @@wagons_count += 1
+    @wagon_number = @@wagons_count
   end
 
 end  

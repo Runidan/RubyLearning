@@ -1,24 +1,11 @@
-=begin
- - Разбить программу на отдельные классы (каждый класс в отдельном файле) 
- - Разделить поезда на два типа PassengerTrain и CargoTrain, сделать родителя для классов,
-     который будет содержать общие методы и свойства
- - Определить, какие методы могут быть помещены в private/protected и вынести их в такую секцию. 
-    В комментарии к методу обосновать, почему он был вынесен в private/protected
- - Вагоны теперь делятся на грузовые и пассажирские (отдельные классы). 
-    К пассажирскому поезду можно прицепить только пассажирские, к грузовому - грузовые. 
- - При добавлении вагона к поезду, объект вагона должен передаваться как аргумент метода и сохраняться во внутреннем массиве поезда,
-   в отличие от предыдущего задания, где мы считали только кол-во вагонов. 
-    Параметр конструктора "кол-во вагонов" при этом можно удалить.
- 
-=end
-
 class Train
-  attr_reader :number, :type, :speed
+  attr_reader :number, :type, :speed, :train_wagons
 
   def initialize(number, type)
-    @number = number
     @type = type
+    @number = number
     @speed = 0
+    @train_wagons = []
   end
 
   def accelerator(value = 5)
@@ -60,7 +47,8 @@ class Train
     if @route && @current_station_index != @route.stations.size - 1
       @route.stations[@current_station_index].send_train(self)
       @current_station_index += 1
-      puts "Поезд прибыл на станцию #{@route.stations[@current_station_index]}"
+      @route.stations[@current_station_index].add_train(self)
+      puts "Поезд прибыл на станцию #{@route.stations[@current_station_index].name}"
     end
   end 
 
@@ -68,21 +56,26 @@ class Train
     if @route && @current_station_index != 0
       @route.stations[@current_station_index].send_train(self)
       @current_station_index -= 1
-      puts "Поезд прибыл на станцию #{@route.stations[@current_station_index]}"
+      @route.stations[@current_station_index].add_train(self)
+      puts "Поезд прибыл на станцию #{@route.stations[@current_station_index].name}"
     end
   end
 end
 
 class CargoTrain < Train
-  def initialize
-    super
+  def initialize(number)
     @type = :cargo
+    @number = number
+    @speed = 0
+    @train_wagons = []
   end
 end
 
 class PassengerTrain < Train
-  def initialize
-    super
+  def initialize(number)
     @type = :passenger
+    @number = number
+    @speed = 0
+    @train_wagons = []
   end
 end
