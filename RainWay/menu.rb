@@ -2,8 +2,7 @@ class Menu
   attr_reader :stations, :trains, :routes
 
   def initialize
-    @trains = []
-    @routes = []
+      @routes = []
   end
 
   
@@ -67,7 +66,7 @@ class Menu
     type = gets.chomp.to_i
     type == 1 ? type = :cargo : type = :passenger
     train = Train.new(number, type)
-    @trains << train
+    Train. << train
     puts "\tПоезд №#{train.number.to_s} создан. Тип - #{train.type.to_s}"
   end  
 
@@ -137,12 +136,12 @@ class Menu
 
   def delete_wagon_train
     puts "\n\tОт какого поезда отцепить вагон?"
-    @trains.each do |train|
+    Train.trains.each do |train|
       if train.train_wagons.size != 0
-        puts "#{@trains.index(train) + 1}: №#{train.number} Тип: #{train.type}, вагонов #{train.train_wagons.size}"
+        puts "#{Train.trains.index(train) + 1}: №#{train.number} Тип: #{train.type}, вагонов #{train.train_wagons.size}"
       end  
     end
-    train = @trains[gets.chomp.to_i - 1]
+    train = Train.trains[gets.chomp.to_i - 1]
     i = 1
     while i == 1
       train.delete_wagon
@@ -188,10 +187,10 @@ class Menu
   end
 
   def choose_train
-    @trains.each do |train|
-      puts "#{@trains.index(train) + 1}: № #{train.number} Тип: #{train.type}"
+    Train.trains.each do |train|
+      puts "#{Train.trains.index(train) + 1}: № #{train.number} Тип: #{train.type}"
     end
-    train = @trains[gets.chomp.to_i - 1]
+    train = Train.trains[gets.chomp.to_i - 1]
   end
 
 end

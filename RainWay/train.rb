@@ -5,14 +5,28 @@ class Train
   attr_reader :number, :type, :speed, :train_wagons
 
   include Manufacturer
+
+  @@trains = []
+
+  def self.find(number)
+    @@trains.each do |train|
+      if train.number == number
+        return train
+      end
+    end
+    return nil
+  end
+
+  def self.trains
+    @@trains
+  end
   
   def initialize(number, type)
     @type = type
     @number = number
     @speed = 0
     @train_wagons = []
-
-
+    @@trains << self
   end
 
   def accelerator(value = 5)
