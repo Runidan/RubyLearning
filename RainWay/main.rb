@@ -7,6 +7,7 @@ require_relative 'passengerWagon'
 require_relative 'menu'
 
 
+
 menu1 = Menu.new
 
 menu1.main_menu

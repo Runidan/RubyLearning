@@ -1,26 +1,32 @@
 require_relative 'manufacturer'
+require_relative 'instanceCounter'
 
 class Train
 
   attr_reader :number, :type, :speed, :train_wagons
 
   include Manufacturer
+  include InstanceCounter
 
   @@trains = []
 
-  def self.find(number)
-    @@trains.each do |train|
-      if train.number == number
-        return train
+  class << self
+    def find(number)
+      @@trains.each do |train|
+        if train.number == number
+          return train
+        end
       end
+      return nil
     end
-    return nil
-  end
+  
+    def trains
+      @@trains
+    end
 
-  def self.trains
-    @@trains
   end
   
+    
   def initialize(number, type)
     @type = type
     @number = number
@@ -89,6 +95,8 @@ class CargoTrain < Train
     @number = number
     @speed = 0
     @train_wagons = []
+    Train.trains << self
+    self.register_instance
   end
 end
 
@@ -98,5 +106,7 @@ class PassengerTrain < Train
     @number = number
     @speed = 0
     @train_wagons = []
+    Train.trains << self
+    self.register_instance
   end
 end
