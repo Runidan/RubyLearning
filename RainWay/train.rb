@@ -1,11 +1,18 @@
+require_relative 'manufacturer'
+
 class Train
+
   attr_reader :number, :type, :speed, :train_wagons
 
+  include Manufacturer
+  
   def initialize(number, type)
     @type = type
     @number = number
     @speed = 0
     @train_wagons = []
+
+
   end
 
   def accelerator(value = 5)

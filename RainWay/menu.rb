@@ -2,7 +2,6 @@ class Menu
   attr_reader :stations, :trains, :routes
 
   def initialize
-    @stations = []
     @trains = []
     @routes = []
   end
@@ -50,14 +49,13 @@ class Menu
     print "\tВведите название станции: "
     name = gets.chomp.to_sym
     check = false
-    @stations.each do |station|
+    Station.all.each do |station|
       check = true if station.name == name
     end
     if check
       puts "Станция с именем #{name} уже существует"
     else
       station = Station.new(name)
-      @stations << station
       puts "\tСтанция #{station.name.to_s} создана"
     end  
   end
@@ -68,21 +66,19 @@ class Menu
     print "\tВведите тип поезда (1 - Cargo, 2 - Passenger): "
     type = gets.chomp.to_i
     type == 1 ? type = :cargo : type = :passenger
-    print "\tВведите количество вагонов: "
-    vagons_count = gets.chomp.to_i
-    train = Train.new(number, type, vagons_count)
+    train = Train.new(number, type)
     @trains << train
-    puts "\tПоезд №#{train.number.to_s} создан. Тип - #{train.type.to_s}, вагонов: #{train.vagons_count.to_s}"
+    puts "\tПоезд №#{train.number.to_s} создан. Тип - #{train.type.to_s}"
   end  
 
   def make_route
     puts "\tСуществующие станции: "
-    @stations.each {|station| puts "\t#{@stations.index(station) + 1} - #{station.name}"}
+    Station.all.each {|station| puts "\t#{Station.all.index(station) + 1} - #{station.name}"}
     print "\tВведите номер первой станции станции: "
     i = gets.chomp.to_sym - 1 
     print "\tВведите номер конечной станции: "
     j = gets.chomp.to_sym - 1
-    rt = Route.new(@stations[i], @stations[j])
+    rt = Route.new(Station.all[i], Station.all[j])
     @routes << rt
     puts "Создан маршрут #{rt.stations.first.name} - #{rt.stations.last.name}"
   end
@@ -98,10 +94,10 @@ class Menu
     k = gets.chomp.to_i
     while k == 1
       puts "\tСозданные станции: "
-      @stations.each {|station| puts "\t#{@stations.index(station) + 1} - #{station.name}"}
+      Station.all.each {|station| puts "\t#{Station.alls.index(station) + 1} - #{station.name}"}
       print "\tВведите номер станции, которую хотите добавить: "
       i = gets.chomp.to_sym - 1
-      route.add_station(@stations[i])
+      route.add_station(Station.all[i])
       print "\tНажмите 1 если хотите ещё добавить промежуточную станцию "
       k = gets.chomp.to_i
     end  
@@ -182,7 +178,7 @@ class Menu
 
   def list_stations
     puts "Список станций и поездов на них:"
-    @station.each do |station|
+    Station.all.each do |station|
       puts "\tСтанция #{station.name.to_s}"
       station.trains.each do |train|
         puts "\t\tПоезд №#{train.number}"
