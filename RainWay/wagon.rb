@@ -2,17 +2,20 @@ require_relative 'instanceCounter'
 
 class Wagon
   include InstanceCounter
+  include Manufacturer
 
-  @@wagons_count = 0
+  @@wagons_count = 1
 
-  attr_reader :type, :wagon_number
+  attr_reader :type 
+  attr_accessor :number
 
-  def initialize(type)
+  def initialize(type, number = @@wagons_count)
     @type = type
+    @number = number
     @@wagons_count += 1
-    @wagon_number = @@wagons_count
     self.register_instance
   end
+
 end
 
 
