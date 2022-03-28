@@ -24,6 +24,10 @@ class Train
       @@trains
     end
 
+    def trains_set(train)
+      @@trains << train
+    end
+
   end
   
     

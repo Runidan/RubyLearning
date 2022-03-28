@@ -64,10 +64,23 @@ class Menu
     number = gets.chomp.to_sym
     print "\tВведите тип поезда (1 - Cargo, 2 - Passenger): "
     type = gets.chomp.to_i
-    type == 1 ? type = :cargo : type = :passenger
-    train = Train.new(number, type)
-    Train. << train
-    puts "\tПоезд №#{train.number.to_s} создан. Тип - #{train.type.to_s}"
+    print "\tВведите количество вагонов: "
+    wagons_count = gets.chomp.to_i
+    if type == 1
+      train = CargoTrain.new(number)
+      wagons_count.times do 
+        train.add_wagon(CargoWagon.new)
+      end
+    else
+      train = PassengerTrain.new(number)
+      wagons_count.times do
+        train.add_wagon(PassengerWagon.new)
+      end
+    end
+  
+
+    train.class.trains_set(train)
+    puts "\tПоезд №#{train.number.to_s} создан. Тип - #{train.type.to_s}, количество вагонов: #{train.train_wagons.size}"
   end  
 
   def make_route
