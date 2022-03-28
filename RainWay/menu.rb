@@ -44,7 +44,7 @@ class Menu
     0 - Выйти из программы  
     Выберете номер пункта меню: 
     menu
-    puts menu
+    puts main_menu
   end
 
   def make_station
