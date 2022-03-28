@@ -80,9 +80,6 @@ class Menu
         train.add_wagon(PassengerWagon.new)
       end
     end
-  
-
-    train.class.trains_set(train)
     puts "\tПоезд №#{train.number.to_s} создан. Тип - #{train.type.to_s}, количество вагонов: #{train.train_wagons.size}"
   end  
 
