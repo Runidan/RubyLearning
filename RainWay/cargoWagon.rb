@@ -6,7 +6,7 @@ class CargoWagon < Wagon
   def initialize
     @type = :cargo
     @@wagons_count += 1
-    @number = "cr#{@@wagons_count}"
+    @number = "cr#{@@wagons_count.to_s}"
     self.class.instances
   end
 

@@ -191,6 +191,7 @@ class Menu
       else
         puts "Повторите выбор\n\n"
       end
+      puts "Поезд находится на станции #{train.current_station.name}"
     end
   end
 

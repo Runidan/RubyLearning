@@ -12,7 +12,7 @@ class Wagon
 
   def initialize(type, number = @@wagons_count)
     @type = type
-    @number = @type == :cargo ? "cr#{number.to_s}" : "ps#{number.to_s}"
+    @number = String(@type == :cargo ? "cr#{number.to_s}" : "ps#{number.to_s}")
     validate!
     @@wagons_count += 1
     self.register_instance
