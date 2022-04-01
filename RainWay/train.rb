@@ -9,6 +9,7 @@ class Train
   include InstanceCounter
 
   @@trains = []
+  @@types = [:cargo, :passenger]
 
   class << self
     def find(number)
@@ -32,8 +33,10 @@ class Train
   
     
   def initialize(number, type)
+    #redex = /([a-z]{3}-\d{3})/i
     @type = type
     @number = number
+    validate!
     @speed = 0
     @train_wagons = []
     @@trains << self
@@ -47,9 +50,15 @@ class Train
     @speed = 0
   end
 
-  def add_wagon(wagon)
-    if @speed == 0 && wagon.type == self.type
-       @train_wagons << wagon
+  def add_wagon
+    if @speed == 0
+      if @type == :cargo
+        @train_wagons << CargoWagon.new
+      elsif @type == :passenger
+        @train_wagons << PassengerWagon.new
+      else
+        raise RailRoadExeption.new("Отсутствуют вагоны для поезда данного типа")
+      end
     end
   end
 
@@ -91,12 +100,24 @@ class Train
       puts "Поезд прибыл на станцию #{@route.stations[@current_station_index].name}"
     end
   end
+
+  def valid?
+    validate!
+  end
+
+  protected
+  def validate!
+    raise RailRoadExeption.new("Неверный тип поезда") if !@@types.include?(@type)
+    raise RailRoadExeption.new("Неправильный формат номера поезда") if @number !~ /^[a-z]{3}-\d{3}$/i
+    true
+  end
 end
 
 class CargoTrain < Train
   def initialize(number)
     @type = :cargo
     @number = number
+    validate!
     @speed = 0
     @train_wagons = []
     Train.trains << self
@@ -108,6 +129,7 @@ class PassengerTrain < Train
   def initialize(number)
     @type = :passenger
     @number = number
+    validate!
     @speed = 0
     @train_wagons = []
     Train.trains << self

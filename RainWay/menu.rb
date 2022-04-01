@@ -1,5 +1,5 @@
 class Menu 
-  attr_reader :stations, :trains, :routes
+  attr_reader :routes
 
   def initialize
       @routes = []
@@ -63,24 +63,28 @@ class Menu
   end
 
   def make_train
-    print "\tВведите номер поезда: "
+    print "\tВведите номер поезда в формате 'ggg-111': "
     number = gets.chomp.to_sym
     print "\tВведите тип поезда (1 - Cargo, 2 - Passenger): "
     type = gets.chomp.to_i
+    if type == 1
+      class_train = CargoTrain
+    else
+      class_train = PassengerTrain
+    end
+    train = class_train.new(number)
     print "\tВведите количество вагонов: "
     wagons_count = gets.chomp.to_i
-    if type == 1
-      train = CargoTrain.new(number)
-      wagons_count.times do 
-        train.add_wagon(CargoWagon.new)
-      end
-    else
-      train = PassengerTrain.new(number)
-      wagons_count.times do
-        train.add_wagon(PassengerWagon.new)
-      end
+    wagons_count.times do
+      train.add_wagon
     end
-    puts "\tПоезд №#{train.number.to_s} создан. Тип - #{train.type.to_s}, количество вагонов: #{train.train_wagons.size}"
+
+    rescue RailRoadExeption => e
+      puts "=" * 10
+      puts "Возникла ошибка: #{e.message}"
+      puts "=" * 10
+    else
+      puts "\tПоезд №#{train.number.to_s} создан. Тип - #{train.type.to_s}, количество вагонов: #{train.train_wagons.size}"
   end  
 
   def make_route

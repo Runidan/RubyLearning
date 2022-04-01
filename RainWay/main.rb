@@ -5,8 +5,7 @@ require_relative 'wagon'
 require_relative 'cargoWagon'
 require_relative 'passengerWagon'
 require_relative 'menu'
-
-
+require_relative 'railRoadExeption'
 
 menu1 = Menu.new
 

@@ -1,0 +1,2 @@
+class RailRoadExeption < StandardError
+end
