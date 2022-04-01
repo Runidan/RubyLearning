@@ -88,7 +88,6 @@ class Train
       @route.stations[@current_station_index].send_train(self)
       @current_station_index += 1
       @route.stations[@current_station_index].add_train(self)
-      puts "Поезд прибыл на станцию #{@route.stations[@current_station_index].name}"
     end
   end 
 
@@ -97,8 +96,11 @@ class Train
       @route.stations[@current_station_index].send_train(self)
       @current_station_index -= 1
       @route.stations[@current_station_index].add_train(self)
-      puts "Поезд прибыл на станцию #{@route.stations[@current_station_index].name}"
     end
+  end
+
+  def current_station
+    @route.stations[@current_station_index]
   end
 
   def valid?

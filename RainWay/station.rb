@@ -13,6 +13,7 @@ class Station
 
   def initialize(name)
     @name = name
+    validate!
     @trains = []
     @@stations << self
     self.register_instance
@@ -39,5 +40,17 @@ class Station
     if @trains.include?(train)
       @trains.delete(train)
     end  
+  end
+
+  def valid?
+    validate!
+  end
+
+  protected
+  def validate!
+    raise RailRoadExeption.new("Неверный формат названия станции") if @name !~ /^[А-ЯЁA-Z][а-яёa-z]*$/
+    raise RailRoadExeption.new("Название станции не может быть пустым") if @name.nil?
+    raise RailRoadExeption.new("Название станции должно быть больше друх символов") if @name.size < 3
+    true
   end
 end

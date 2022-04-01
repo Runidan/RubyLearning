@@ -48,7 +48,7 @@ class Menu
   end
 
   def make_station
-    print "\tВведите название станции: "
+    print "\tВведите название станции (Одно слово на анг. или рус. языке с большой буквы): "
     name = gets.chomp.to_sym
     check = false
     Station.all.each do |station|
@@ -57,8 +57,15 @@ class Menu
     if check
       puts "Станция с именем #{name} уже существует"
     else
-      station = Station.new(name)
-      puts "\tСтанция #{station.name.to_s} создана"
+      begin
+       station = Station.new(name)
+      rescue RailRoadExeption => e
+        puts "=" * 10
+        puts "Возникла ошибка: #{e.message}"
+        puts "=" * 10
+      else
+        puts "\tСтанция #{station.name.to_s} создана"
+      end
     end  
   end
 
@@ -138,14 +145,9 @@ class Menu
   def add_wagons_train
     puts "\tК какому поезду прицепить вагон?"
     train = choose_train
-    type = train.type
     i = 1
     while i == 1
-      if type == :cargo
-        train.add_wagon(CargoWagon.new)
-      else
-        train.add_wagon(PassengerWagon.new)
-      end
+      train.add_wagon
       puts "Добавлен один вагон к поезду #{train.number}. \nВсего #{train.train_wagons.size} вагонов.\nДобавить ещё? (Нажмите 1 если да)"
       i = gets.chomp.to_i
     end
