@@ -73,12 +73,7 @@ class Menu
     print "\tВведите номер поезда в формате 'ggg-111': "
     number = gets.chomp.to_sym
     print "\tВведите тип поезда (1 - Cargo, 2 - Passenger): "
-    type = gets.chomp.to_i
-    if type == 1
-      class_train = CargoTrain
-    else
-      class_train = PassengerTrain
-    end
+    class_train = gets.chomp.to_i == 1 ? CargoTrain : PassengerTrain
     train = class_train.new(number)
     print "\tВведите количество вагонов: "
     wagons_count = gets.chomp.to_i
@@ -91,7 +86,9 @@ class Menu
       puts "Возникла ошибка: #{e.message}"
       puts "=" * 10
     else
-      puts "\tПоезд №#{train.number.to_s} создан. Тип - #{train.type.to_s}, количество вагонов: #{train.train_wagons.size}"
+      puts "=" * 10
+      puts "Поезд № #{train.number.to_s} создан. Тип - #{train.type.to_s}, количество вагонов: #{train.train_wagons.size}"
+      puts "=" * 10
   end  
 
   def make_route
