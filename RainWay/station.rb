@@ -48,9 +48,11 @@ class Station
 
   protected
   def validate!
-    raise RailRoadExeption.new("Неверный формат названия станции") if @name !~ /^[А-ЯЁA-Z][а-яёa-z]*$/
-    raise RailRoadExeption.new("Название станции не может быть пустым") if @name.nil?
-    raise RailRoadExeption.new("Название станции должно быть больше друх символов") if @name.size < 3
+    errors = []
+    errors << "Неверный формат названия станции" if @name !~ /^[А-ЯЁA-Z][а-яёa-z]*$/
+    errors << "Название станции не может быть пустым" if @name.nil?
+    errors << "Название станции должно быть больше друх символов" if @name.size < 3
+    raise RailRoadExeption.new(errors.join("\n")) unless errors.empty?
     true
   end
 end

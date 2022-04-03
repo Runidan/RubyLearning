@@ -109,32 +109,10 @@ class Train
 
   protected
   def validate!
-    raise RailRoadExeption.new("Неверный тип поезда") if !@@types.include?(@type)
-    raise RailRoadExeption.new("Неправильный формат номера поезда") if @number !~ /^[a-z]{3}-\d{3}$/i
+    errors = []
+    errors << "Неверный тип поезда" if !@@types.include?(@type)
+    errors << "Неправильный формат номера поезда" if @number !~ /^[a-z]{3}-\d{3}$/i
+    raise RailRoadExeption.new(errors.join("\n")) unless errors.empty?
     true
-  end
-end
-
-class CargoTrain < Train
-  def initialize(number)
-    @type = :cargo
-    @number = number
-    validate!
-    @speed = 0
-    @train_wagons = []
-    Train.trains << self
-    self.register_instance
-  end
-end
-
-class PassengerTrain < Train
-  def initialize(number)
-    @type = :passenger
-    @number = number
-    validate!
-    @speed = 0
-    @train_wagons = []
-    Train.trains << self
-    self.register_instance
   end
 end

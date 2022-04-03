@@ -24,9 +24,11 @@ class Wagon
 
   protected
   def validate!
-    raise RailRoadExeption.new("Неверно определен тип вагона") if !@@wagon_type.include?(@type)
-    raise RailRoadExeption.new("Неверный формат номера вагона") if @number !~ /^(cr|ps)[0-9]*$/i
-    raise RailRoadExeption.new("Номер вагона не может быть пустым") if @number.nil?
+    errors = []
+    errors << "Неверно определен тип вагона" if !@@wagon_type.include?(@type)
+    errors << "Неверный формат номера вагона" if @number !~ /^(cr|ps)[0-9]*$/i
+    errors << "Номер вагона не может быть пустым" if @number.nil?
+    raise RailRoadExeption.new(errors.join("\n")) unless errors.empty?
     true
   end
 
