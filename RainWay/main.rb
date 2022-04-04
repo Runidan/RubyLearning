@@ -10,5 +10,6 @@ require_relative 'passengerTrain'
 require_relative 'cargoTrain'
 
 menu1 = Menu.new
+tr1 = CargoTrain.new('sfs-123')
 
 menu1.main_menu

@@ -33,7 +33,6 @@ class Train
   
     
   def initialize(number, type)
-    #redex = /([a-z]{3}-\d{3})/i
     @type = type
     @number = number
     validate!
@@ -50,12 +49,12 @@ class Train
     @speed = 0
   end
 
-  def add_wagon
+  def add_wagon(capacity)
     if @speed == 0
       if @type == :cargo
-        @train_wagons << CargoWagon.new
+        @train_wagons << CargoWagon.new(capacity)
       elsif @type == :passenger
-        @train_wagons << PassengerWagon.new
+        @train_wagons << PassengerWagon.new(capacity)
       else
         raise RailRoadExeption.new("Отсутствуют вагоны для поезда данного типа")
       end
