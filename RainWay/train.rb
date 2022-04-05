@@ -3,7 +3,7 @@ require_relative 'instanceCounter'
 
 class Train
 
-  attr_reader :number, :type, :speed, :train_wagons
+  attr_reader :number, :type, :speed, :wagons
 
   include Manufacturer
   include InstanceCounter
@@ -37,7 +37,7 @@ class Train
     @number = number
     validate!
     @speed = 0
-    @train_wagons = []
+    @wagons = []
     @@trains << self
   end
 
@@ -49,12 +49,12 @@ class Train
     @speed = 0
   end
 
-  def add_wagon(capacity)
+  def add_wagon(place)
     if @speed == 0
       if @type == :cargo
-        @train_wagons << CargoWagon.new(capacity)
+        @wagons << CargoWagon.new(place)
       elsif @type == :passenger
-        @train_wagons << PassengerWagon.new(capacity)
+        @wagons << PassengerWagon.new(place)
       else
         raise RailRoadExeption.new("Отсутствуют вагоны для поезда данного типа")
       end
@@ -62,10 +62,10 @@ class Train
   end
 
   def delete_wagon(index)
-    if @speed == 0 &&  @train_wagons.size != 0
+    if @speed == 0 &&  @wagons.size != 0
       p index
-      @train_wagons.delete_at(index - 1)
-      p @train_wagons
+      @wagons.delete_at(index - 1)
+      p @wagons
     end  
   end
 
@@ -109,7 +109,7 @@ class Train
   end
 
   def action(&block)
-    @train_wagons.map {|wagon| block.call(wagon)}
+    @wagons.map {|wagon| block.call(wagon)}
   end
 
   protected

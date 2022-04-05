@@ -6,7 +6,7 @@ class PassengerTrain < Train
     @number = number
     validate!
     @speed = 0
-    @train_wagons = []
+    @wagons = []
     Train.trains << self
     self.register_instance
   end
