@@ -60,11 +60,12 @@ class Menu
     puts "\tВыберете поезд:"
     train = choose_train
     menu = <<~here
-    1 - Добавить вагон к поезду
-    2 - Отцепить вагон от поезда
-    3 - Назначить поезду существующий маршрут
-    4 - Перемещать поезд по маршруту
-    5 - Занять место/Загрузить вагон
+    1 - Показать список вагонов
+    2 - Добавить вагон к поезду
+    3 - Отцепить вагон от поезда
+    4 - Назначить поезду существующий маршрут
+    5 - Перемещать поезд по маршруту
+    6 - Занять место/Загрузить вагон
     0 - Вернуться в главное меню 
     here
     choice3 = 1
@@ -72,11 +73,12 @@ class Menu
       puts menu
       choice3 = gets.chomp.to_i
       case choice3
-        when 1 then add_wagons_train(train)
-        when 2 then delete_wagon_train(train)
-        when 3 then add_route_train(train)
-        when 4 then move_train(train)
-        when 5 then take_place(train)
+        when 1 then show_wagons(train)
+        when 2 then add_wagons_train(train)
+        when 3 then delete_wagon_train(train)
+        when 4 then add_route_train(train)
+        when 5 then move_train(train)
+        when 6 then take_place(train)
         else 
           puts "Выбор неверный. Повторите\n\n"
       end
@@ -213,8 +215,11 @@ class Menu
   def delete_wagon_train(train)
     i = 1
     while i == 1
-      train.delete_wagon
       if train.train_wagons.size != 0
+        puts "Выберете номер вагона для удаления"
+        show_wagons(train)
+        i_wagon = gets.chomp.to_i
+        train.delete_wagon(i_wagon)
         puts "Удалён один вагон. Осталось #{train.train_wagons.size}. Удалить еще? (Нажмите 1 если да)"
         i = gets.chomp.to_i
       else
@@ -248,17 +253,21 @@ class Menu
     Station.all.each do |station|
       puts "\tСтанция #{station.name.to_s}"
       station.trains.each do |train|
-        puts "\t\tПоезд №#{train.number}"
+        puts "\t\tПоезд №#{train.number}, тпи #{train.type}, вагонов: #{train.train_wagons.size}"
       end
     end
     puts "\n"
   end
 
+  def show_wagons(train)
+    train.train_wagons.each do |wagon|
+      puts "#{train.train_wagons.index(wagon) + 1}: № #{wagon.number} Свободно: #{wagon.free_places}"
+    end
+  end
+
   def take_place(train)
     puts "Выберете вагон:"
-    train.train_wagons.each do |wagon|
-      puts "#{train.train_wagons.index(wagon) + 1}: № #{wagon.number} Свободно: #{wagon.free_places}}"
-    end
+    show_wagons(train)
     wagon = train.train_wagons[gets.chomp.to_i - 1]
     if wagon.type == :cargo
       puts "Свободно #{wagon.free_places}. Сколько хотите занять: "
@@ -268,7 +277,6 @@ class Menu
       wagon.take_place
       puts "Место в вагоне #{wagon.number} поезда #{train.number} занято. Осталось свободных мест #{wagon.free_places}"
     end
-
   end
 
   def choose_train

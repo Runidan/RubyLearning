@@ -61,9 +61,11 @@ class Train
     end
   end
 
-  def delete_wagon
+  def delete_wagon(index)
     if @speed == 0 &&  @train_wagons.size != 0
-       @train_wagons.pop
+      p index
+      @train_wagons.delete_at(index - 1)
+      p @train_wagons
     end  
   end
 
@@ -104,6 +106,10 @@ class Train
 
   def valid?
     validate!
+  end
+
+  def action(&block)
+    @train_wagons.map {|wagon| block.call(wagon)}
   end
 
   protected
