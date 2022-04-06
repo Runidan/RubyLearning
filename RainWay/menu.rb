@@ -8,23 +8,16 @@ class Menu
   def main_menu
     choice0 = 1
       while choice0 != 0
-        show_menu
+        show_mainmenu
         choice0 = gets.chomp.to_i
-        case choice0
-          when 1 then menu_stations
-          when 2 then make_train
-          when 3 then menu_train
-          when 4 then menu_route
-          when 0 then choice = 0 
-          else 
-            puts "Пункт меню отствутствует\n\n"
-        end
+        m_main = {1 => :menu_stations, 2 => make_train, 3 => menu_train, 4 => menu_route}
+        method(m_main[choice0]).call ? m_main.has_key?(choice0) : choice0 = 0
       end
   end
 
   private
 
-  def show_menu
+  def show_mainmenu
     main_menu = <<-menu
     Выберете действие:
     1 - Действия со станциями
@@ -36,25 +29,17 @@ class Menu
     puts main_menu
   end
 
-  def menu_stations
+  def show_stmenu
     menu = <<~here
-      1 - Создать станцию
-      2 - Просмотреть список станций и список поездов на станциях
-      0 - Главное меню
+    1 - Создать станцию
+    2 - Просмотреть список станций и список поездов на станциях
+    0 - Главное меню
     Выберете действие:
     here
-    choice = 1
-    until choice == 0
-      puts menu
-      m = {1 => :make_station, 2 => :list_stations}
-      choice = gets.chomp.to_i
-      method(m[choice]).call ? m.has_key?(choice) : choice = 0
-    end
+    puts menu
   end
 
-  def menu_train
-    puts "\tВыберете поезд:"
-    train = choose_train
+  def show_trmenu 
     menu = <<~here
     1 - Показать список вагонов
     2 - Добавить вагон к поезду
@@ -64,40 +49,53 @@ class Menu
     6 - Занять место/Загрузить вагон
     0 - Вернуться в главное меню 
     here
-    choice3 = 1
-    until choice3 == 0
-      puts menu
-      choice3 = gets.chomp.to_i
-      case choice3
-        when 1 then show_wagons(train)
-        when 2 then add_wagons_train(train)
-        when 3 then delete_wagon_train(train)
-        when 4 then add_route_train(train)
-        when 5 then move_train(train)
-        when 6 then take_place(train)
-        else 
-          puts "Выбор неверный. Повторите\n\n"
-      end
+    puts menu
+  end
+
+  def show_routemenu
+    menu = <<~here
+    1 - Создание нового маршрута
+    2 - Изменить существующий маршрут
+    0 - Выйти в основное меню
+    Выберете пункт меню:
+    here
+    puts menu
+  end
+
+  def menu_stations
+    choice = 1
+    until choice == 0
+      show_stmenu
+      m = {1 => :make_station, 2 => :list_stations}
+      choice = gets.chomp.to_i
+      method(m[choice]).call ? m.has_key?(choice) : choice = 0
+    end
+  end
+
+  def menu_train
+    puts "\tВыберете поезд:"
+    train = choose_train
+    choice = 1
+    until choice == 0
+      show_trmenu
+      choice = gets.chomp.to_i
+      m_tr = {1 => :show_wagons,
+              2 => :add_wagons_train,
+              3 => :delete_wagon_train,
+              4 => :add_route_train,
+              5 => :move_train,
+              6 => :take_place}
+      method(m_tr[choice]).call(train) ? m_tr.has_key?(choice) : choice = 0
     end
   end
 
   def menu_route
-    menu = <<~here
-      1 - Создание нового маршрута
-      2 - Изменить существующий маршрут
-      0 - Выйти в основное меню
-      Выберете пункт меню:
-    here
     choice4 = 1
     while choice4 != 0
-      puts menu
+      show_routemenu
       choice4 = gets.chomp.to_i
-      case choice4
-      when 1 then make_route
-      when 2 then edit_route
-      else 
-          puts "Повторите выбор"
-      end
+      m_rt = {1 => :make_route, 2 => edit_route}
+      method(m_tr[choice4]).call ? m_rt.has_key?(choice4) : choice4 = 0
     end
   end
 
