@@ -46,13 +46,9 @@ class Menu
     choice = 1
     until choice == 0
       puts menu
+      m = {1 => :make_station, 2 => :list_stations}
       choice = gets.chomp.to_i
-      case choice
-      when 1 then make_station
-      when 2 then list_stations
-      else
-        puts "Повторите выбор"
-      end
+      method(m[choice]).call ? m.has_key?(choice) : choice = 0
     end
   end
 
