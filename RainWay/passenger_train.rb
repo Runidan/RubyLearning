@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 require_relative 'train'
 
-class CargoTrain < Train
+class PassengerTrain < Train
   def initialize(number)
-    @type = :cargo
+    @type = :passenger
     @number = number
     validate!
     @speed = 0
     @wagons = []
     Train.trains << self
-    self.register_instance
+    register_instance
   end
 end

@@ -1,23 +1,30 @@
-require_relative 'instanceCounter'
+# frozen_string_literal: true
+
+require_relative 'instance_counter'
 
 class Station
-
   include InstanceCounter
 
   attr_reader :name, :trains
-  @@stations = []
 
-  def self.all
-      @@stations
+  @stations = []
+
+  class << self
+    attr_accessor :stations
+
+    def all
+      @stations
+    end
   end
 
   
+
   def initialize(name)
     @name = name
     validate!
     @trains = []
-    @@stations << self
-    self.register_instance
+    self.class.stations << self
+    register_instance
   end
 
   def add_train(train)
@@ -25,9 +32,7 @@ class Station
   end
 
   def send_train(train)
-    if @trains.include?(train)
-      @trains.delete(train)
-    end  
+    @trains.delete(train) if @trains.include?(train)
   end
 
   def valid?
@@ -35,16 +40,18 @@ class Station
   end
 
   def action(&block)
-    @trains.map {|train| block.call(train)}
+    @trains.map { |train| block.call(train) }
   end
 
   protected
+
   def validate!
     errors = []
-    errors << "Неверный формат названия станции" if @name !~ /^[А-ЯЁA-Z][а-яёa-z]*$/
-    errors << "Название станции не может быть пустым" if @name.nil?
-    errors << "Название станции должно быть больше друх символов" if @name.size < 3
-    raise RailRoadExeption.new(errors.join("\n")) unless errors.empty?
+    errors << 'Неверный формат названия станции' if @name !~ /^[А-ЯЁA-Z][а-яёa-z]*$/
+    errors << 'Название станции не может быть пустым' if @name.nil?
+    errors << 'Название станции должно быть больше друх символов' if @name.size < 3
+    raise RailRoadExeption, errors.join("\n") unless errors.empty?
+
     true
   end
 end
