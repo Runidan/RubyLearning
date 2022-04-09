@@ -91,10 +91,8 @@ module TrainActions
       when 1 then train.go_next_station
       when 2 then train.go_previos_station
       when 0 then i = 0
-      end
-      puts "Поезд находится на станции #{train.current_station.name}"
+      end; puts "Поезд находится на станции #{train.current_station.name}"
     end
-  rescue RailRoadExeption => e
-    puts "=====\nВозникла ошибка: #{e.message}\n====="
+  rescue RailRoadExeption => e; puts "=====\nВозникла ошибка: #{e.message}\n====="
   end
 end

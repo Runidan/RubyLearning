@@ -17,19 +17,15 @@ module WagonActions
 
   def delete_wagon_train(train)
     i = 1
-    while i == 1
-      if !train.wagons.empty?
-        puts 'Выберете номер вагона для удаления'
-        show_wagons(train)
-        i_wagon = gets.chomp.to_i
-        train.delete_wagon(i_wagon)
-        puts "Удалён один вагон. Осталось #{train.wagons.size}. Удалить еще? (Нажмите 1 если да)"
-        i = gets.chomp.to_i
-      else
-        puts "Поезд № #{train.number} не имеет вагонов"
-        i = 0
-      end
+    while i == 1 && !train.wagons.empty?
+      puts 'Выберете номер вагона для удаления'
+      show_wagons(train)
+      i_wagon = gets.chomp.to_i
+      train.delete_wagon(i_wagon)
+      puts "Удалён один вагон. Осталось #{train.wagons.size}. Удалить еще? (Нажмите 1 если да)"
+      i = gets.chomp.to_i
     end
+    puts "Поезд № #{train.number} не имеет вагонов" if train.wagons.empty?
   end
 
   def show_wagons(train)
