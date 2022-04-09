@@ -10,10 +10,10 @@ class Menu
   def main_menu
     choice0 = 1
     m_main = { 1 => :menu_stations, 2 => :make_train, 3 => :menu_train, 4 => :menu_route }
-    while choice0 != 0
+    until choice0.zero?
       show_mainmenu
       choice0 = gets.chomp.to_i
-      method(m_main[choice0]).call ? m_main.key?(choice0) : choice0 = 0
+      m_main.key?(choice0) ? method(m_main[choice0]).call : choice0 = 0
     end
   end
 
@@ -26,7 +26,7 @@ class Menu
     2 - Создать поезд
     3 - Действия с поездами и вагонами
     4 - Действия с маршрутами
-    0 - Выйти из программы#{'  '}
+    0 - Выйти из программы
     MENU
     puts main_menu
   end
@@ -49,7 +49,7 @@ class Menu
       4 - Назначить поезду существующий маршрут
       5 - Перемещать поезд по маршруту
       6 - Занять место/Загрузить вагон
-      0 - Вернуться в главное меню#{' '}
+      0 - Вернуться в главное меню
     HERE
     puts menu
   end
@@ -66,11 +66,11 @@ class Menu
 
   def menu_stations
     choice1 = 1
+    m = { 1 => :make_station, 2 => :list_stations }
     until choice1.zero?
       show_stmenu
-      m = { 1 => :make_station, 2 => :list_stations }
       choice1 = gets.chomp.to_i
-      method(m[choice1]).call ? m.key?(choice1) : choice1 = 0
+      m.key?(choice1) ? method(m[choice1]).call : choice1 = 0
     end
   end
 
@@ -78,26 +78,22 @@ class Menu
     puts "\tВыберете поезд:"
     train = choose_train
     choice3 = 1
+    m_tr = { 1 => :show_wagons, 2 => :add_wagons_train, 3 => :delete_wagon_train,
+             4 => :add_route_train, 5 => :move_train, 6 => :take_place }
     until choice3.zero?
       show_trmenu
       choice3 = gets.chomp.to_i
-      m_tr = { 1 => :show_wagons,
-               2 => :add_wagons_train,
-               3 => :delete_wagon_train,
-               4 => :add_route_train,
-               5 => :move_train,
-               6 => :take_place }
-      method(m_tr[choice3]).call(train) ? m_tr.key?(choice3) : choice3 = 0
+      m_tr.key?(choice3) ? method(m_tr[choice3]).call(train) : choice3 = 0
     end
   end
 
   def menu_route
     choice4 = 1
+    m_rt = { 1 => :make_route, 2 => :edit_route }
     while choice4 != 0
       show_routemenu
       choice4 = gets.chomp.to_i
-      m_rt = { 1 => :make_route, 2 => edit_route }
-      method(m_tr[choice4]).call ? m_rt.key?(choice4) : choice4 = 0
+      m_rt.key?(choice4) ? method(m_tr[choice4]).call : choice4 = 0
     end
   end
 
@@ -114,9 +110,7 @@ class Menu
       begin
         station = Station.new(name)
       rescue RailRoadExeption => e
-        puts '=' * 10
-        puts "Возникла ошибка: #{e.message}"
-        puts '=' * 10
+        puts "==========\nВозникла ошибка: #{e.message}\n=========="
       else
         puts "\tСтанция #{station.name} создана"
       end
@@ -124,6 +118,18 @@ class Menu
   end
 
   def make_train
+    train, wagons_count, place = param_train
+    wagons_count.times do
+      train.add_wagon(place)
+    end
+  rescue RailRoadExeption => e
+    puts "==========\nВозникла ошибка: #{e.message}\n=========="
+  else
+    puts "==========\nПоезд № #{train.number} создан. Тип - #{train.type},
+            количество вагонов: #{train.wagons.size}\n=========="
+  end
+
+  def param_train
     print "\tВведите номер поезда в формате 'ggg-111': "
     number = gets.chomp.to_sym
     print "\tВведите тип поезда (1 - Cargo, 2 - Passenger): "
@@ -131,23 +137,9 @@ class Menu
     train = class_train.new(number)
     print "\tВведите количество вагонов: "
     wagons_count = gets.chomp.to_i
-    if class_train == CargoTrain
-      print "\tВведите грузоподъемность вагонов: "
-    else
-      print "\tВведите вместимость вагонов: "
-    end
+    print "\tВведите вместимость (грузоподъемность) вагонов: "
     place = gets.chomp.to_i
-    wagons_count.times do
-      train.add_wagon(place)
-    end
-  rescue RailRoadExeption => e
-    puts '=' * 10
-    puts "Возникла ошибка: #{e.message}"
-    puts '=' * 10
-  else
-    puts '=' * 10
-    puts "Поезд № #{train.number} создан. Тип - #{train.type}, количество вагонов: #{train.wagons.size}"
-    puts '=' * 10
+    [train, wagons_count, place]
   end
 
   def make_route
@@ -200,7 +192,8 @@ class Menu
       puts train.type == :cargo ? "\tУкажите грузоподъемность вагона:" : "\tУкажите вместимость вагона:"
       place = gets.chomp.to_i
       train.add_wagon(place)
-      puts "Добавлен один вагон к поезду #{train.number}. \nВсего #{train.wagons.size} вагонов.\nДобавить ещё? (Нажмите 1 если да)"
+      puts "Добавлен один вагон к поезду #{train.number}. \nВсего #{train.wagons.size} вагонов.
+      \nДобавить ещё? (Нажмите 1 если да)"
       i = gets.chomp.to_i
     end
   end
@@ -225,19 +218,26 @@ class Menu
   def move_train(train)
     i = 1
     while i == 1
-      puts "\n\tВыберете: "
-      puts "\t1: Движение вперед"
-      puts "\t2: Движение назад"
-      puts "\t0: Выйти"
+      show_movetrmenu
       case gets.chomp.to_i
       when 1 then train.go_next_station
       when 2 then train.go_previos_station
       when 0 then i = 0
-      else
-        puts "Повторите выбор\n\n"
       end
       puts "Поезд находится на станции #{train.current_station.name}"
     end
+  rescue RailRoadExeption => e
+    puts "=====\nВозникла ошибка: #{e.message}\n====="
+  end
+
+  def show_movetrmenu
+    menu_movetr = <<-HERE
+      1 - Движение вперед
+      2 - Движение назад
+      0 - Выйти
+      Выберете:
+    HERE
+    puts menu_movetr
   end
 
   def list_stations
@@ -252,29 +252,29 @@ class Menu
   end
 
   def show_wagons(train)
+    puts 'Вагоны:'
     train.wagons.each do |wagon|
       puts "#{train.wagons.index(wagon) + 1}: № #{wagon.number} Свободно: #{wagon.free_place}"
     end
   end
 
   def take_place(train)
-    puts 'Выберете вагон:'
     show_wagons(train)
     wagon = train.wagons[gets.chomp.to_i - 1]
     if wagon.type == :cargo
       puts "Свободно #{wagon.free_place}. Сколько хотите занять: "
       wagon.take_place(gets.chomp.to_f)
-      puts "Груз в вагон #{wagon.number} поезда #{train.number} загружет. Осталось свободно #{wagon.free_place}"
     else
       wagon.take_place
-      puts "Место в вагоне #{wagon.number} поезда #{train.number} занято. Осталось свободных мест #{wagon.free_place}"
     end
+    puts "В вагоне № #{wagon.number} поезда № #{train.number} свободно #{wagon.free_place}"
   end
 
   def choose_train
     Train.trains.each do |train|
-      puts "#{Train.trains.index(train) + 1}: № #{train.number} Тип: #{train.type} Количество вагонов: #{train.wagons.size}"
+      puts "#{Train.trains.index(train) + 1}: № #{train.number}
+      Тип: #{train.type} Количество вагонов: #{train.wagons.size}"
     end
-    train = Train.trains[gets.chomp.to_i - 1]
+    Train.trains[gets.chomp.to_i - 1]
   end
 end

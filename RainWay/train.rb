@@ -36,6 +36,7 @@ class Train
     @speed = 0
     @wagons = []
     @@trains << self
+    register_instance
   end
 
   def accelerator(value = 5)
@@ -47,24 +48,22 @@ class Train
   end
 
   def add_wagon(place)
-    if @speed.zero?
-      case @type
-      when :cargo
-        @wagons << CargoWagon.new(place)
-      when :passenger
-        @wagons << PassengerWagon.new(place)
-      else
-        raise RailRoadExeption, 'Отсутствуют вагоны для поезда данного типа'
-      end
+    return unless @speed.zero?
+
+    case @type
+    when :cargo
+      @wagons << CargoWagon.new(place)
+    when :passenger
+      @wagons << PassengerWagon.new(place)
+    else
+      raise RailRoadExeption, 'Отсутствуют вагоны для поезда данного типа'
     end
   end
 
   def delete_wagon(index)
-    if @speed.zero? && !@wagons.empty?
-      p index
-      @wagons.delete_at(index - 1)
-      p @wagons
-    end
+    return unless @speed.zero? && !@wagons.empty?
+
+    @wagons.delete_at(index - 1)
   end
 
   def add_route(route)
@@ -74,30 +73,36 @@ class Train
   end
 
   def next_station
+    return raise RailRoadExeption, 'Поезду не присвоен маршрут' if @route.nil?
     return @route.stations[@current_station_index + 1] if @route && @current_station_index != @route.stations.size - 1
   end
 
   def previos_station
+    return raise RailRoadExeption, 'Поезду не присвоен маршрут' if @route.nil?
     return @route.stations[@current_station_index - 1] if @route && @current_station_index != 0
   end
 
   def go_next_station
-    if @route && @current_station_index != @route.stations.size - 1
-      @route.stations[@current_station_index].send_train(self)
-      @current_station_index += 1
-      @route.stations[@current_station_index].add_train(self)
-    end
+    return raise RailRoadExeption, 'Поезду не присвоен маршрут' if @route.nil?
+    return unless @route && @current_station_index != @route.stations.size - 1
+
+    @route.stations[@current_station_index].send_train(self)
+    @current_station_index += 1
+    @route.stations[@current_station_index].add_train(self)
   end
 
   def go_previos_station
-    if @route && @current_station_index != 0
-      @route.stations[@current_station_index].send_train(self)
-      @current_station_index -= 1
-      @route.stations[@current_station_index].add_train(self)
-    end
+    return raise RailRoadExeption, 'Поезду не присвоен маршрут' if @route.nil?
+    return unless @route && @current_station_index != 0
+
+    @route.stations[@current_station_index].send_train(self)
+    @current_station_index -= 1
+    @route.stations[@current_station_index].add_train(self)
   end
 
   def current_station
+    return raise RailRoadExeption, 'Поезду не присвоен маршрут' if @route.nil?
+
     @route.stations[@current_station_index]
   end
 

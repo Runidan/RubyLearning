@@ -5,12 +5,7 @@ require_relative 'instance_counter'
 
 class PassengerWagon < Wagon
   def initialize(place)
-    @type = :passenger
-    @place = place
-    @used_place = 0
-    @@wagons_count += 1
-    @number = "ps#{@@wagons_count}"
-    self.class.instances
+    super(:passenger, place, @@wagons_count)
   end
 
   def valid?
@@ -18,11 +13,9 @@ class PassengerWagon < Wagon
   end
 
   def take_place
-    if @place > @used_place
-      @used_place += 1
-    else
-      raise RailRoadExeption, 'Свободных мест нет'
-    end
+    raise RailRoadExeption, 'Свободных мест нет' unless @place > @used_place
+
+    @used_place += 1
   end
 
   protected
