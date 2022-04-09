@@ -1,14 +1,16 @@
 # frozen_string_literal: true
 
 require_relative 'station'
-require_relative 'train'
+require_relative 'menu/menu'
+require_relative 'manufacturer'
+require_relative 'instance_counter'
+require_relative 'wagons/wagon'
+require_relative 'wagons/cargo_wagon'
+require_relative 'wagons/passenger_wagon'
+require_relative 'trains/train'
+require_relative 'trains/cargo_train'
+require_relative 'trains/passenger_train'
 require_relative 'route'
-require_relative 'wagon'
-require_relative 'cargo_wagon'
-require_relative 'passenger_wagon'
-require_relative 'menu'
 require_relative 'rail_road_exeption'
-require_relative 'passenger_train'
-require_relative 'cargo_train'
 
 Menu.new.main_menu

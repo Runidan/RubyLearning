@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'instance_counter'
-require_relative 'manufacturer'
-
 class Wagon
   include InstanceCounter
   include Manufacturer

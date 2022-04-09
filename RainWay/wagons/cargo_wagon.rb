@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'wagon'
-require_relative 'instance_counter'
-
 class CargoWagon < Wagon
   def initialize(place)
     super(:cargo, place, @@wagons_count)

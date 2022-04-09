@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'manufacturer'
-require_relative 'instance_counter'
-
 class Train
   attr_reader :number, :type, :speed, :wagons
 
