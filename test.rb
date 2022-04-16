@@ -1,7 +1,19 @@
-i = 1
-while i == 1
-  name = 23
-  i = 2
+require 'pry'
+class Y
+  p Y
+  define_method(:my_method) do
+    p self
+    puts "methots body"
+  end
+
+  class << self
+    def clas_meth
+      p Y
+      p 'clas_meth'
+    end
+  end
 end
 
-p name
+a = 7
+
+puts a
