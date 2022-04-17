@@ -18,4 +18,16 @@ module Accessors
     end
   end
 
+  def strong_attr_accessor(name, arg_class)
+    raise TypeError.new("#{name}  is not symbol") unless name.is_a?(Symbol)
+    raise TypeError.new("#{arg_class} is not class") unless arg_class.instance_of?(Class)
+    define_method(name) do
+      instance_variable_get("@#{name}")
+    end
+    define_method("#{name}=") do |arg|
+      raise TypeError.new("Неверный класс аргумента. Ожидается переменная класса #{arg_class}") unless arg.instance_of?(arg_class)
+
+      instance_variable_set("@#{name}", arg)
+    end
+  end
 end
