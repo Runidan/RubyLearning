@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'accessors'
+require_relative 'validation'
 require_relative 'station'
 require_relative 'menu/menu'
 require_relative 'manufacturer'

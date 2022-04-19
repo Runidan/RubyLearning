@@ -1,11 +1,15 @@
 # frozen_string_literal: true
 
 require_relative 'instance_counter'
+require_relative 'accessors'
 
 class Station
+  extend Validation
   include InstanceCounter
 
   attr_reader :name, :trains
+
+  validate
 
   @stations = []
 
@@ -19,7 +23,9 @@ class Station
 
   def initialize(name)
     @name = name
-    validate!
+    validate!(:name, :presence)
+    rdx = Regexp.new("/^[А-ЯЁA-Z][а-яёa-z]*$/")
+    validate!(:name, :format, rdx)
     @trains = []
     self.class.stations << self
     register_instance
@@ -33,23 +39,8 @@ class Station
     @trains.delete(train) if @trains.include?(train)
   end
 
-  def valid?
-    validate!
-  end
-
   def action(&block)
     @trains.map { |train| block.call(train) }
   end
 
-  protected
-
-  def validate!
-    errors = []
-    errors << 'Неверный формат названия станции' if @name !~ /^[А-ЯЁA-Z][а-яёa-z]*$/
-    errors << 'Название станции не может быть пустым' if @name.nil?
-    errors << 'Название станции должно быть больше друх символов' if @name.size < 3
-    raise RailRoadExeption, errors.join("\n") unless errors.empty?
-
-    true
-  end
 end

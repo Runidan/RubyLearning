@@ -1,10 +1,17 @@
 # frozen_string_literal: true
+require_relative '../validation'
+require_relative '../manufacturer'
+require_relative '../instance_counter'
 
 class Train
-  attr_reader :number, :type, :speed, :wagons
 
+  extend Validation
   include Manufacturer
   include InstanceCounter
+  
+  attr_reader :number, :type, :speed, :wagons
+
+  validate
 
   @@trains = []
   @@types = %i[cargo passenger]
@@ -29,7 +36,10 @@ class Train
   def initialize(number, type)
     @type = type
     @number = number
-    validate!
+    validate!(:number, :presence)
+    validate!(:type, :presence)
+    rdx = Regexp.new("/^[a-z]{3}-\d{3}$/i")
+    validate!(:number, :format, rdx)
     @speed = 0
     @wagons = []
     @@trains << self
@@ -103,22 +113,7 @@ class Train
     @route.stations[@current_station_index]
   end
 
-  def valid?
-    validate!
-  end
-
   def action(&block)
     @wagons.map { |wagon| block.call(wagon) }
-  end
-
-  protected
-
-  def validate!
-    errors = []
-    errors << 'Неверный тип поезда' unless @@types.include?(@type)
-    errors << 'Неправильный формат номера поезда' if @number !~ /^[a-z]{3}-\d{3}$/i
-    raise RailRoadExeption, errors.join("\n") unless errors.empty?
-
-    true
   end
 end
