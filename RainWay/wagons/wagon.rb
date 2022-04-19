@@ -2,6 +2,7 @@
 
 class Wagon
   extend Validation
+  extend Accessors
   include InstanceCounter
   include Manufacturer
 
@@ -9,8 +10,7 @@ class Wagon
   @@wagon_type = %i[cargo passenger]
 
   attr_reader :type, :place, :taked_place
-  attr_accessor :number
-
+  attr_accessor_with_history :number
   validate
 
   def initialize(type, place, number = @@wagons_count)
